@@ -1,28 +1,22 @@
 public class Main {
 
     /**
-     * initializes the simulation by creating a supplier
-     * and three Chefs, each containing their specific ingredient.
-     * It then starts the agent and chef threads to simulate concurrent behavior.
+     * starts the simulation by creating the supplier and chefs, then starts their threads
      */
     public static void main(String[] args) {
-        // create supplier
-        Supplier supplier = new Supplier();
+        // create shared monitor
+        TableMonitor tableMonitor = new TableMonitor();
 
-        // create three Chefs, each have their specific ingredient
-        Chef chefWithRice = new Chef(Supplier.RICE, supplier);
-        Chef chefWithNori = new Chef(Supplier.NORI, supplier);
-        Chef chefWithFilling = new Chef(Supplier.FILLING, supplier);
+        // create supplier and chefs
+        Supplier supplier = new Supplier(tableMonitor);
+        Chef chefWithRice = new Chef(TableMonitor.RICE, tableMonitor);
+        Chef chefWithNori = new Chef(TableMonitor.NORI, tableMonitor);
+        Chef chefWithFilling = new Chef(TableMonitor.FILLING, tableMonitor);
 
-        // create and start threads for supplier and chefs
-        Thread agentThread = new Thread(supplier, "Agent");
-        Thread riceChefThread = new Thread(chefWithRice, "RiceChef");
-        Thread noriChefThread = new Thread(chefWithNori, "NoriChef");
-        Thread fillingChefThread = new Thread(chefWithFilling, "FillingChef");
-
-        agentThread.start();
-        riceChefThread.start();
-        noriChefThread.start();
-        fillingChefThread.start();
+        // start threads
+        new Thread(supplier, "agent").start();
+        new Thread(chefWithRice, "riceChef").start();
+        new Thread(chefWithNori, "noriChef").start();
+        new Thread(chefWithFilling, "fillingChef").start();
     }
 }
